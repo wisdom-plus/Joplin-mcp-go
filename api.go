@@ -33,7 +33,7 @@ func (c *JoplinClient) GetNote(noteID string) (*Note, error) {
 	if err := c.ensurePort(); err != nil {
 		return nil, err
 	}
-	url := fmt.Sprintf("%s/notes/%s?token=%s", c.BaseURL, noteID, c.Token)
+	url := fmt.Sprintf("%s/notes/%s?fields=id,title,body&token=%s", c.BaseURL, noteID, c.Token)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -50,7 +50,6 @@ func (c *JoplinClient) GetNote(noteID string) (*Note, error) {
 	if err := json.NewDecoder(resp.Body).Decode(&note); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %w", err)
 	}
-
 	return &note, nil
 }
 

@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
@@ -34,11 +33,6 @@ func main() {
     s.AddTool(getnoteTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
         note_id := request.Params.Arguments["note_id"].(string)
 
-        err := godotenv.Load()
-        if err != nil {
-            log.Fatal("Error loading .env file")
-        }
-
         token := os.Getenv("JOPLIN_TOKEN")
         // get note from Joplin
         client := NewJoplinClient("", token)
@@ -47,7 +41,7 @@ func main() {
             log.Fatal(err)
         }
 
-        return mcp.NewToolResultText(fmt.Sprintf("%.2f", note.Body)), nil
+        return mcp.NewToolResultText(note.Body), nil
     })
 
     // Start the server
